@@ -1,0 +1,26 @@
+# On utilise une image officielle PHP pour exécuter le pipeline
+image: php:8.1
+
+stages:
+  - test
+  - deploy
+
+# Job 1 : Test de syntaxe (Linting)
+# Ce job vérifie s'il y a des erreurs de syntaxe (ex: point-virgule manquant)
+test_syntax:
+  stage: test
+  script:
+    - echo "🔍 Vérification de la syntaxe des fichiers PHP..."
+    - find . -name "*.php" ! -path "./vendor/*" -exec php -l {} \;
+  allow_failure: false
+
+# Job 2 : Simulation de déploiement
+deploy_prod:
+  stage: deploy
+  script:
+    - echo "🚀 Déploiement de l'application PHP..."
+    - echo "Application disponible sur le serveur de production."
+  environment: production
+  only:
+    - main
+    - master
